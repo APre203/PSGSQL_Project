@@ -39,7 +39,22 @@ def search():
         # Perform a database query with the user's input
         cursor = db_connection.cursor()
         cursor.execute(query + ";")
+        
+        if "insert into" in str(query.lower()) or "delete from" in str(query.lower()):
+            e = ""
+            if "insert into" in query.lower():
+                e = "Insert"
+            else:
+                e = "Delete"
+            db_connection.commit()
+            cursor.close()
+            db_connection.close()
+            return render_template('insert_delete.html', error=e)
+
         results = cursor.fetchall()
+        qu = query.lower().split(" ")
+        ind = qu.index("from")
+        from_where = qu[ind+1].replace(";","")
         col_names = [desc[0] for desc in cursor.description]
 
 
@@ -48,7 +63,7 @@ def search():
         db_connection.close()
         #print(results)
         # Process the retrieved data and render a template with the results
-        return render_template('search_results.html', results=results, col_names=col_names)
+        return render_template('search_results.html', results=results, col_names=col_names, fr=from_where)
 
     except Exception as e:
         try:
