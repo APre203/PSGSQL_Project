@@ -1,0 +1,48 @@
+from flask import Flask, render_template, request
+import psycopg2
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DB_PASS = os.getenv('db_password')
+
+# Database connection parameters
+db_host = 'localhost'  # Replace with your database host
+db_name = 'Music_460_Project'  # Replace with your database name
+db_user = 'postgres'  # Replace with your database username
+db_password = DB_PASS  # Replace with your database password
+db_port = 5432  # Replace with your database port (default PostgreSQL port is 5432)
+
+db_connection = psycopg2.connect(
+        dbname=db_name,
+        user=db_user,
+        password=db_password,
+        host=db_host,
+        port=db_port
+)
+
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/search', methods=['POST'])
+def search():
+    query = request.form.get('query')
+
+    # Perform a database query with the user's input
+    cursor = db_connection.cursor()
+    cursor.execute(query + ";")
+    results = cursor.fetchall()
+    col_names = [desc[0] for desc in cursor.description]
+
+    cursor.close()
+    #print(results)
+    # Process the retrieved data and render a template with the results
+    return render_template('search_results.html', results=results, col_names=col_names)
+
+if __name__ == '__main__':
+    app.run()

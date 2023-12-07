@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Form</title>
+    <link rel="stylesheet" type="text/css" href="static\main.css"/>
+</head>
+<body>
+    <h1> Hello this is database app </h1>
+    
+    
+    
+    <form action="/search" method="POST" class="form_class">
+        <input type="text" name="query" placeholder="Enter your query">
+        <button type="submit">Search</button>
+    </form>
+    
+    <div class="textbox_button">    
+        <table border="1">
+            <thead>
+                <tr>
+                    {% for col in col_names %}
+                    
+                    <th> {{ col }} </th>
+                    
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                    <tr>
+                        {% for val in row %}
+                        <td>{{ val }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

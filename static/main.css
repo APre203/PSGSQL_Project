@@ -1,0 +1,12 @@
+body{
+    text-align: center;
+}
+
+.textbox_button{
+    display: flex;
+    justify-content: center;
+}
+
+.form_class{
+    margin-bottom: 20px
+}
