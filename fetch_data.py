@@ -36,6 +36,7 @@ def get_genre(csv_file=csv_df, number=NUMBER): # Returns the genre of the first 
 
 
 def get_artist(csv_file=csv_df, number=NUMBER): # Returns the artist of the first # songs and their name, id, bio, genre, country -> RETURNS THE FIRST INSTANCE OF ARTIST FOUND (GENRE AND COUNTRY WILL BE DECIDED FROM THAT )
+  artist_map = {}
   checker = []
   artist = []
   i = 0
@@ -43,16 +44,17 @@ def get_artist(csv_file=csv_df, number=NUMBER): # Returns the artist of the firs
     if i > number:
       break
     a = row["artist_individual"]
-    aid = "artist:" + row["artist_id"][15:]
+    # aid = "artist:" + row["artist_id"][15:]
     g = row["artist_genre"]
     c = row["country"]
     if a.lower() not in checker:
       aid = i+1
+      artist_map[a] = aid
       artist.append((aid, a, f'{a} is from {c} and plays music in the {g} genre', g, c)) # aid, name, bio, genre, country
       checker.append(a)
     i += 1
-  
-  return artist
+
+  return artist, artist_map
 # artist = get_artist()
 # print(artist)
 
@@ -62,25 +64,29 @@ def get_artist(csv_file=csv_df, number=NUMBER): # Returns the artist of the firs
 
 
 
-def get_song(csv_file=csv_df, number=NUMBER): #returns the first # songs and their id, title, duration, releasedate, playcount, genre, lyrics(no lyrics)
+def get_song(artist_map, csv_file=csv_df, number=NUMBER): #returns the first # songs and their id, title, duration, releasedate, playcount, genre, lyrics(no lyrics)
   checker = []
   songs = []
   i = 0
   for index, row in csv_file.iterrows():
     if i > number:
       break
+    
+    aid = artist_map[row["artist_individual"]]
     t = row["track_name"]
     tid = "track:" + row["uri"][14:]
     dur = row["duration"]
     release = str(pd.to_datetime(row["release_date"]))
-    
+
     play = row["streams"]
     genre = row["artist_genre"]
     lyrics = "No lyrics present as of right now"
-    
+
+
     if tid.lower() not in checker:
       tid = i+1#"track:" + row["uri"][14:]
-      songs.append((tid,t,int(float(dur)),release,int(float(play)),genre,lyrics)) # tid, title, duration, releasedate, playcount, genre, lyrics 
+      # print(aid, row["artist_individual"])
+      songs.append((tid, aid, t,int(float(dur)),release,int(float(play)),genre,lyrics)) # tid, artistid, title, duration, releasedate, playcount, genre, lyrics
       checker.append(tid)
     i += 1
   return songs
@@ -207,11 +213,12 @@ def get_playlistsong(csv_file=csv_df, number=NUMBER): #playlistsongid, playlisti
 
 def main():
   genre = get_genre()
-  artist = get_artist()
-  track = get_song()
+  artist, artist_map = get_artist()
+  track = get_song(artist_map)
   user = get_user()
   playlist = get_playlist()
   playlist_song = get_playlistsong()
+
 
   return genre, artist, track, user, playlist, playlist_song
 
