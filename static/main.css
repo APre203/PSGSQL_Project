@@ -5,6 +5,7 @@ body{
 .textbox_button{
     display: flex;
     justify-content: center;
+    margin-bottom: 20px;
 }
 
 .form_class{
