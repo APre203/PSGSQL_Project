@@ -40,8 +40,8 @@ try:
         insert_value = (a[0], a[1], a[2], a[3], a[4])
         cursor.execute(insert_script, insert_value)
     for t in track:
-        insert_script = 'INSERT INTO song (trackid, artistid, title, duration, releasedate, playcount, genre, lyrics) VALUES (%s, %s, %s, %s, %s, %s, %s)'
-        insert_value = (t[0], t[1], t[2], t[3], t[4], t[5], t[6])
+        insert_script = 'INSERT INTO song (trackid, artistid, title, duration, releasedate, playcount, genre, lyrics) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
+        insert_value = (t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7])
         cursor.execute(insert_script, insert_value)
     for u in user:
         insert_script = 'INSERT INTO appuser (userid, username, email, user_password, datejoined, premiummember) VALUES (%s, %s, %s, %s, %s, %s)'

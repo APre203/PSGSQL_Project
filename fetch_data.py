@@ -1,5 +1,5 @@
 import pandas as pd
-csv_file = "/content/final.csv"
+csv_file = "final.csv"
 csv_df = pd.read_csv(csv_file, delimiter=",", encoding='utf-8')
 csv_df = csv_df.drop(['danceability','energy','key','mode','loudness','speechiness','acousticness','instrumentalness','liveness','valence','tempo','pivot'],axis=1)
 
@@ -49,7 +49,7 @@ def get_artist(csv_file=csv_df, number=NUMBER): # Returns the artist of the firs
     c = row["country"]
     if a.lower() not in checker:
       aid = i+1
-      artist_map[a] = aid
+      artist_map[a.lower()] = aid
       artist.append((aid, a, f'{a} is from {c} and plays music in the {g} genre', g, c)) # aid, name, bio, genre, country
       checker.append(a)
     i += 1
@@ -72,7 +72,7 @@ def get_song(artist_map, csv_file=csv_df, number=NUMBER): #returns the first # s
     if i > number:
       break
     
-    aid = artist_map[row["artist_individual"]]
+    aid = artist_map[row["artist_individual"].lower()]
     t = row["track_name"]
     tid = "track:" + row["uri"][14:]
     dur = row["duration"]
