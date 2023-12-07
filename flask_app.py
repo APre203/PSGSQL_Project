@@ -14,13 +14,7 @@ db_user = 'postgres'  # Replace with your database username
 db_password = DB_PASS  # Replace with your database password
 db_port = 5432  # Replace with your database port (default PostgreSQL port is 5432)
 
-db_connection = psycopg2.connect(
-        dbname=db_name,
-        user=db_user,
-        password=db_password,
-        host=db_host,
-        port=db_port
-)
+
 
 
 app = Flask(__name__)
@@ -31,7 +25,15 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
+    db_connection = psycopg2.connect(
+        dbname=db_name,
+        user=db_user,
+        password=db_password,
+        host=db_host,
+        port=db_port
+)
     try:
+        
         query = request.form.get('query')
 
         # Perform a database query with the user's input
@@ -40,16 +42,20 @@ def search():
         results = cursor.fetchall()
         col_names = [desc[0] for desc in cursor.description]
 
+
+        db_connection.commit()
         cursor.close()
+        db_connection.close()
         #print(results)
         # Process the retrieved data and render a template with the results
         return render_template('search_results.html', results=results, col_names=col_names)
 
     except Exception as e:
         try:
-            conn.rollback()
+            db_connection.rollback()
             return render_template('error.html', error=str(e))
         except:
+            db_connection.close()
             return render_template('error.html', error=str(e))
 if __name__ == '__main__':
     app.run()
