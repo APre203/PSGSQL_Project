@@ -63,7 +63,7 @@ def search():
         db_connection.close()
         #print(results)
         # Process the retrieved data and render a template with the results
-        return render_template('search_results.html', results=results, col_names=col_names, fr=from_where)
+        return render_template('search_results.html', results=results, col_names=col_names, fr=from_where, num = len(results))
 
     except Exception as e:
         try:

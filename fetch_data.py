@@ -51,7 +51,7 @@ def get_artist(csv_file=csv_df, number=NUMBER): # Returns the artist of the firs
       aid = i+1
       artist_map[a.lower()] = aid
       artist.append((aid, a, f'{a} is from {c} and plays music in the {g} genre', g, c)) # aid, name, bio, genre, country
-      checker.append(a)
+      checker.append(a.lower())
     i += 1
 
   return artist, artist_map
