@@ -198,10 +198,13 @@ def get_playlistsong(csv_file=csv_df, number=NUMBER): #playlistsongid, playlisti
   psid = 1
   for i in range(0, PLAYLISTS): # i is the playlistid
     number_of_songs = random.randint(1,PLAYLIST_SONGS)
+    count_tracks = []
     for o in range(0,number_of_songs): #plsong is the playlistsongid
       ordernumber = o+1
       pid = i+1 
       tid = random.choice(tracks)
+      while tid in count_tracks:
+        tid = random.choice(tracks)
       # ordernumber = order.get(pid,0) + 1
       # order[pid] = order.get(pid,0) + 1
 
