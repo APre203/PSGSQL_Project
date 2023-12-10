@@ -40,10 +40,12 @@ def search():
         cursor = db_connection.cursor()
         cursor.execute(query + ";")
         
-        if "insert into" in str(query.lower()) or "delete from" in str(query.lower()):
+        if "insert into" in str(query.lower()) or "delete from" in str(query.lower()) or "UPDATE" in str(query):
             e = ""
             if "insert into" in query.lower():
                 e = "Insert"
+            elif "UPDATE" in query:
+                e = "Update"
             else:
                 e = "Delete"
             db_connection.commit()
